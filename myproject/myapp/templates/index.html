@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>드라마 검색</title>
+    <script>
+        function searchTVShows() {
+            const query = document.getElementById("search-input").value;
+            fetch(`/search/?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = "";
+
+                    if (data.results) {
+                        data.results.forEach(show => {
+                            const showElement = document.createElement("div");
+                            showElement.innerHTML = `
+                                <h3>${show.name} (${show.first_air_date})</h3>
+                                <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}">
+                                <p>${show.overview}</p>
+                            `;
+                            resultsDiv.appendChild(showElement);
+                        });
+                    } else {
+                        resultsDiv.innerHTML = "<p>검색 결과가 없습니다.</p>";
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+</head>
+<body>
+    <h1>드라마 검색</h1>
+    <input type="text" id="search-input" placeholder="드라마 제목을 입력하세요">
+    <button onclick="searchTVShows()">검색</button>
+    <div id="results"></div>
+</body>
+</html>
