@@ -1,39 +1,100 @@
+{% load static %} 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>드라마 검색</title>
-    <script>
-        function searchTVShows() {
-            const query = document.getElementById("search-input").value;
-            fetch(`/search/?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    const resultsDiv = document.getElementById("results");
-                    resultsDiv.innerHTML = "";
-
-                    if (data.results) {
-                        data.results.forEach(show => {
-                            const showElement = document.createElement("div");
-                            showElement.innerHTML = `
-                                <h3>${show.name} (${show.first_air_date})</h3>
-                                <img src="https://image.tmdb.org/t/p/w200${show.poster_path}" alt="${show.name}">
-                                <p>${show.overview}</p>
-                            `;
-                            resultsDiv.appendChild(showElement);
-                        });
-                    } else {
-                        resultsDiv.innerHTML = "<p>검색 결과가 없습니다.</p>";
-                    }
-                })
-                .catch(error => console.error("Error:", error));
-        }
-    </script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
 </head>
 <body>
-    <h1>드라마 검색</h1>
-    <input type="text" id="search-input" placeholder="드라마 제목을 입력하세요">
-    <button onclick="searchTVShows()">검색</button>
-    <div id="results"></div>
+
+    <!-- 상단 네비게이션 바 -->
+    <header>
+        <div class="logo">🐦</div>
+        <nav>
+            <a href="#">HOME</a>
+            <a href="#">MOVIE</a>
+            <a href="#">DRAMA</a>
+            <a href="#">랭킹</a>
+            <a href="#">마이페이지</a>
+        </nav>
+
+        <!-- ✅ 헤더 내 검색창 -->
+        <div class="search-box">
+            <input type="text" id="header-search-input" placeholder="드라마 제목을 입력하세요">
+            <button onclick="searchTVShows()">🔍</button>
+        </div>
+
+        <div class="auth-buttons">
+            <a href="#">Login</a>
+            <button>Sign In</button>
+        </div>
+    </header>
+
+    <!-- ✅ 검색 결과 모달창 -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>🎬 검색 결과</h2>
+
+            <!-- ✅ 모달 내 검색창 -->
+            <div class="search-box modal-search-box">
+                <input type="text" id="modal-search-input" placeholder="드라마 제목을 입력하세요">
+                <button onclick="searchTVShows()">🔍</button>
+            </div>
+
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <!-- 메인 배너 -->
+    <section class="banner">
+        <div class="banner-content">
+            <h1>홈.. 검색결과..??</h1>
+        </div>
+    </section>
+
+
+    <!-- 컨텐츠 섹션 -->
+    <main>
+        <div class="content-container">
+            <!-- 지금 가장 핫한 영화 -->
+            <div class="section">
+                <h2>🔥 지금 가장 핫한 영화</h2>
+                <div class="movie-grid">
+                    <div class="movie-card"></div>
+                    <div class="movie-card"></div>
+                </div>
+            </div>
+
+            <!-- 이런 건 어때요? -->
+            <div class="section">
+                <h2>이런 건 어때요?</h2>
+                <div class="suggestion-box"></div>
+            </div>
+
+            <!-- 지금 뜨고 있는 리뷰 -->
+            <div class="section">
+                <h2>지금 뜨고 있는 리뷰</h2>
+                <div class="review-container">
+                    <div class="review-card"></div>
+                    <div class="review-card">
+                        <p>⭐️⭐️⭐️⭐️⭐️</p>
+                        <p>위키드 - 재밌다</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 챌린지 -->
+            <div class="section">
+                <h2>챌린지</h2>
+                <div class="challenge-box"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>
